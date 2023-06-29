@@ -19,7 +19,7 @@ class od_eval:
     
     def Qc(self, arm_index, od):
         """
-        Return the circulatory capacity for a given arm
+        Return the circulatory flow for a given arm
         """
         n = len(od)
         QcX = 0
@@ -32,7 +32,7 @@ class od_eval:
     
     def Qc_stack(self, arms, od):
         """
-        Evaluate the circulating capacity for all arms and stack into dictionary
+        Evaluate the circulating flow for all arms and stack into dictionary
         """
         y = [0] * arms
         x = dict(zip(range(arms), y))
