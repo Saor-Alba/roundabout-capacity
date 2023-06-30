@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from dataclasses import dataclass, field
+from modules.capacity_eval import Capacity_Eval
 
 class Calibrations(Enum):
     SLOPE = auto()
@@ -17,6 +18,16 @@ class Calibration:
     rfc: list = field(default_factory=list)
     calibration_variables: list = field(default_factory=list)
     calibration_targets: list = field(default_factory=list)
+    entry_flow: int = None
+    circulatory_flow: int = None
+    average_circulatory_flow: float = None
+    average_entry_flow: float = None
+    half_lane_width: float = None
+    entry_width: float = None
+    effective_flare_length: int = None
+    conflict_angle: float = None
+    entry_radius: float = None
+    inscribed_circle_diameter: float = None
 
     perms  = {
         "z": rfc,
@@ -24,40 +35,24 @@ class Calibration:
         "x": calibration_targets
     }
 
-    def slope_pcu(self, z, y, x):
-        return
+    def slope_pcu(self):
+        return Capacity_Eval.kx(phi=self.conflict_angle, r=self.entry_radius) * Capacity_Eval.fcx(x2=Capacity_Eval.x2x(v=self.half_lane_width, e=self.entry_width, s=Capacity_Eval.S(v=self.half_lane_width, e=self.entry_width, l=self.effective_flare_length)),e=self.entry_width, icd=self.inscribed_circle_diameter)
     
-    def slope_queue(self, z, y, x):
+    def slope_queue(self):
+        return 
+
+    def intercept_pcu(self):
+        return self.entry_flow * self.slope_pcu * self.average_circulatory_flow
+
+    def intercept_queue(self):
         return
 
-    def intercept_pcu(self, z, y, x):
-        return
-
-    def intercept_queue(self, z, y, x):
-        return
-
-    def capacity_pcu(self, z, y, x):
-        return
+    def capacity_pcu(self):
+        return self.intercept_pcu + self.slope_pcu * self.circulatory_flow
     
-    def capacity_queue(self, z, y, x):
-        return
-
-    def method_caller(self):
-        methods = {
-            "self.slope_pcu": [Calibrations.SLOPE,Calibration_Target.PCU],
-            "self.slope_queue": [Calibrations.SLOPE,Calibration_Target.QUEUE],
-            "self.intercept_pcu": [Calibrations.INTERCEPT,Calibration_Target.PCU],
-            "self.intercept_queue": [Calibrations.INTERCEPT,Calibration_Target.QUEUE],
-            "self.capacity_pcu": [Calibrations.CAPACITY,Calibration_Target.PCU],
-            "self.capacity_queue": [Calibrations.CAPACITY,Calibration_Target.QUEUE]
-            }
-        op = [method for method in methods.keys() if methods.values() == [self.calibration_type,self.calibration_targets]]
-        print(op)
-
-
-        #methods = dict(zip,list(Calibrations), self.intercept_pcu)
+    def capacity_queue(self):
         return
 
     def calibrator(self):
-        methods = self.method_caller(calibration_type=self.calibration_method, calibration_method=self.calibration_method)
+        
         return
