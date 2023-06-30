@@ -8,15 +8,22 @@ class Flow_Type:
     RANDOM = auto()
 
 @dataclass
-class od_eval:
+class OD_Eval:
     od_type: Flow_Type
     od: list
+    arms: int
 
     def rand_od_builder(self, arms):
         od = np.random.randint(50, 200, (arms, arms))
         np.fill_diagonal(od, 0)
         return od
     
+    def od_importer(self):
+        """
+        This needs to be considered
+        """
+        return
+
     def Qc(self, arm_index, od):
         """
         Return the circulatory flow for a given arm
@@ -46,7 +53,14 @@ class od_eval:
         """
         y = np.sum(od, axis=1)
         x = dict(zip(range(len(od)), y))
-        return x    
+        return x
+
+    def eval(self, od_type):
+        if od_type == Flow_Type.RANDOM:
+            od = self.rand_od_builder(self.arms)
+        else:
+            od = self.od_importer()
+        return od
     
     
 

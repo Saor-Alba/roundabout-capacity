@@ -25,10 +25,9 @@ class Calibration:
     }
 
     def slope_pcu(self, z, y, x):
-        
         return
     
-    def slope_intercept(self, z, y, x):
+    def slope_queue(self, z, y, x):
         return
 
     def intercept_pcu(self, z, y, x):
@@ -43,10 +42,18 @@ class Calibration:
     def capacity_queue(self, z, y, x):
         return
 
-    def method_caller(self, calibration_type, calibration_targets):
-        methods = [method for method in dir(Calibration) if method.startswith("__") is False]
-        methods 
-        print(methods)
+    def method_caller(self):
+        methods = {
+            "self.slope_pcu": [Calibrations.SLOPE,Calibration_Target.PCU],
+            "self.slope_queue": [Calibrations.SLOPE,Calibration_Target.QUEUE],
+            "self.intercept_pcu": [Calibrations.INTERCEPT,Calibration_Target.PCU],
+            "self.intercept_queue": [Calibrations.INTERCEPT,Calibration_Target.QUEUE],
+            "self.capacity_pcu": [Calibrations.CAPACITY,Calibration_Target.PCU],
+            "self.capacity_queue": [Calibrations.CAPACITY,Calibration_Target.QUEUE]
+            }
+        op = [method for method in methods.keys() if methods.values() == [self.calibration_type,self.calibration_targets]]
+        print(op)
+
 
         #methods = dict(zip,list(Calibrations), self.intercept_pcu)
         return
