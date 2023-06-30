@@ -61,8 +61,3 @@ class OD_Eval:
         else:
             od = self.od_importer()
         return od
-    
-    
-
-
-
