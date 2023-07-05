@@ -55,9 +55,13 @@ class OD_Eval:
         x = dict(zip(range(len(od)), y))
         return x
 
-    def eval(self, od_type):
+    def main(self, od_type):
         if od_type == Flow_Type.RANDOM:
             od = self.rand_od_builder(self.arms)
+            Qc = self.Qc_stack(len(od), od)
+            Qe = self.Qe_stack(od)
         else:
             od = self.od_importer()
-        return od
+            Qc = self.Qc_stack(len(od), od)
+            Qe = self.Qe_stack(od)
+        return od, Qc, Qe
