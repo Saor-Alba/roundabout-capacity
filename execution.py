@@ -1,13 +1,13 @@
-import modules.profiler as profiler
-import modules.calibration as cal
+from modules import *
 
 if __name__ == "__main__":
-    traffic_profiler = profiler.Profiler(profile_type=profiler.Profiles.ONEHOUR)
-    model_calibration = cal.Calibration(
-        calibration_type = cal.Calibrations.INTERCEPT,
-        calibration_method = cal.Calibration_Target.PCU,
+    od = OD_Eval.rand_od_builder()
+    traffic_profiler = Profiler(profile_type=Profiles.ONEHOUR)
+    model_calibration = Calibration(
+        calibration_type = Calibrations.INTERCEPT,
+        calibration_method = Calibration_Target.PCU,
         rfc=[],
         calibration_variables=[],
         calibration_targets=[]
         )
-    model_calibration.method_caller()
+    
