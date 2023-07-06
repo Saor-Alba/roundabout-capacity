@@ -1,10 +1,11 @@
 from dataclasses import dataclass
-from modules.capacity_eval import Capacity_Eval
+from modules import *
 from enum import Enum, auto
 
+import scipy.optimize as optimise
 from pulp import LpMaximize, LpProblem, LpStatus, lpSum, LpVariable
 
-class JunctionType:
+class JunctionType(Enum):
     MINI = auto()
     COMPACT = auto()
     NORMAL = auto()
@@ -20,15 +21,42 @@ class Geo_Optimiser:
     circulatory_flow: int
     approach_lanes: int
     junction_type: JunctionType
-    icd_limit: int
 
-
-    def lp_model(self):
-        icd_limit = [{
+    def global_optimisation(self):
+        icd_limit = {
             JunctionType.COMPACT: 36,
             JunctionType.NORMAL: 100,
             JunctionType.MINI: 28
-        }]
+        }
+
+        capacity = Capacity_Eval(
+        half_lane_width=self.half_lane_width,
+        entry_width=self.entry_width,
+        effective_flare_length=self.effective_flare_length,
+        entry_radius=self.entry_radius,
+        inscribed_circle_diameter=self.inscribed_circle_diameter,
+        conflict_angle=self.conflict_angle,
+        circulatory_flow=self.circulatory_flow
+        )
+
+        def objective(self, params):
+            v, e, l, r, icd, phi, QcX = params
+            return capacity.kx(phi, r) * (capacity.Fx(capacity.x2x(v, e, capacity.S(e, v, l))) - capacity.fcx(x2=capacity.x2x(v, e, capacity.S(e, v, l)), e=e, icd=icd) * QcX)
+
+        init = [3, 5, 10, 30, 40, 30, 300]
+        optimiser = optimise.minimize(objective, init)
+        if optimiser.success:
+            fitted_params = optimiser.x
+            print(fitted_params)
+        else:
+            raise ValueError(optimiser.message)
+
+    def lp_model(self):
+        icd_limit = {
+            JunctionType.COMPACT: 36,
+            JunctionType.NORMAL: 100,
+            JunctionType.MINI: 28
+        }
 
         model = LpProblem(name="geo_optimiser", sense=LpMaximize)
         v = LpVariable(name="v", lowBound=2.5)
@@ -41,23 +69,31 @@ class Geo_Optimiser:
         al = LpVariable(name="al", lowBound=0)
         jlp = LpVariable(name="jlp")
 
-        model += Capacity_Eval.c(
-            v=self.half_lane_width,
-            e=self.entry_width,
-            l=self.effective_flare_length,
-            r=self.entry_radius,
-            icd=self.inscribed_circle_diameter,
-            phi=self.conflict_angle,
-            QcX=self.circulatory_flow
-        )
+        capacity = Capacity_Eval(
+            half_lane_width=self.half_lane_width,
+            entry_width=self.entry_width,
+            effective_flare_length=self.effective_flare_length,
+            entry_radius=self.entry_radius,
+            inscribed_circle_diameter=self.inscribed_circle_diameter,
+            conflict_angle=self.conflict_angle,
+            circulatory_flow=self.circulatory_flow
+            )
+
+        model += capacity.kx(phi, r) * (capacity.Fx(capacity.x2x(v, e, capacity.S(e, v, l))) - capacity.fcx(capacity.x2x(v, e, capacity.S(e, v, l)), e, icd) * QcX)
+
+        print(capacity.c)
 
         model += (v <= al * 3, "approach width")
         model += (e >= v, "entry > approach")
-        model += (e < 10.5)
-        model += (l > 5)
-        model += (l < 100)
-        model += (phi > 20)
-        model += (phi < 60)
-        model += (r > 10)
-        model += (r < 100)
+        model += (e <= 10.5)
+        model += (l >= 5)
+        model += (l <= 100)
+        model += (phi >= 20)
+        model += (phi <= 60)
+        model += (r >= 10)
+        model += (r <= 100)
         model += (QcX == self.circulatory_flow)
+        model += (icd <= icd_limit[self.junction_type])
+        
+        status = model.solve()
+        print(status)

@@ -10,4 +10,3 @@ if __name__ == "__main__":
         calibration_variables=[],
         calibration_targets=[]
         )
-    

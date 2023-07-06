@@ -3,15 +3,13 @@ from enum import Enum, auto
 
 import numpy as np
 
-class Flow_Type:
+class Flow_Type(Enum):
     IMPORT = auto()
     RANDOM = auto()
 
 @dataclass
 class OD_Eval:
     od_type: Flow_Type
-    od: list
-    arms: int
 
     def rand_od_builder(self, arms):
         od = np.random.randint(50, 200, (arms, arms))
