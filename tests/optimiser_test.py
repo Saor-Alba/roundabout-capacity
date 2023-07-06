@@ -1,4 +1,4 @@
-from roundabout_capacity.modules import *
+from modules import *
 
 od_model = OD_Eval(
     od_type=Flow_Type.RANDOM
