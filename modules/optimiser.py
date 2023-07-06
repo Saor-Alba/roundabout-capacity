@@ -39,12 +39,16 @@ class Geo_Optimiser:
         circulatory_flow=self.circulatory_flow
         )
 
-        def objective(self, params):
+        def objective(params):
+            """
+            v[0], e[1], l[2], r[3], icd[4], phi[5], QcX[6] = params
+            """
             v, e, l, r, icd, phi, QcX = params
             return capacity.kx(phi, r) * (capacity.Fx(capacity.x2x(v, e, capacity.S(e, v, l))) - capacity.fcx(x2=capacity.x2x(v, e, capacity.S(e, v, l)), e=e, icd=icd) * QcX)
 
+
         init = [3, 5, 10, 30, 40, 30, 300]
-        optimiser = optimise.minimize(objective, init)
+        optimiser = optimise.minimize(objective, init, method='Nelder-Mead')
         if optimiser.success:
             fitted_params = optimiser.x
             print(fitted_params)
