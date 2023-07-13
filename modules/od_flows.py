@@ -45,7 +45,7 @@ class OD_Eval:
             x[arm] = self.Qc(arm, od)
         return x
 
-    def Qe_stack(od):
+    def Qe_stack(self, od):
         """
         Evaluate the entry flow for each arm and stack into dictionary
         """
