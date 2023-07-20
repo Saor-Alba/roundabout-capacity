@@ -7,7 +7,7 @@ geometry = [3, 6, 30, 20, 60, 40]
 
 if __name__ == "__main__":
     od_builder = OD_Eval(od_type=Flow_Type.RANDOM)
-    od = od_builder.rand_od_builder(arms=4)
+    od = od_builder.rand_od_builder(arms=5)
     if PROFILING == True:
         profiler = Profiler(profile_type=Profiles.ONEHOUR)
         od = Profiler.one_hour(od, sigma=1, period=1, periods= 4, graph=False)

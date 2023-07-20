@@ -46,9 +46,10 @@ class Geo_Optimiser:
             v, e, l, r, icd, phi, QcX = params
             return capacity.kx(phi, r) * (capacity.Fx(capacity.x2x(v, e, capacity.S(e, v, l))) - capacity.fcx(x2=capacity.x2x(v, e, capacity.S(e, v, l)), e=e, icd=icd) * QcX)
 
-
         init = [3, 5, 10, 30, 40, 30, 300]
-        optimiser = optimise.minimize(objective, init, method='Nelder-Mead')
+        optimiser = optimise.minimize(objective, x0=init, method='Nelder-Mead', options={'disp': True, 'return_all': True}, bounds=
+                                        ((3, 3, 0, 10, 20, 20, None),
+                                         (10, 15, 40, 200, 100, 60, None))) #PU IN BOUNDS
         if optimiser.success:
             fitted_params = optimiser.x
             print(fitted_params)
