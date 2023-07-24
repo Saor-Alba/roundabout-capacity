@@ -16,11 +16,11 @@ class OD_Eval:
         np.fill_diagonal(od, 0)
         return od
     
-    def od_importer(self):
-        """
-        This needs to be considered
-        """
-        return
+    # def od_importer(self):
+    #     """
+    #     This needs to be considered
+    #     """
+    #     return
 
     def Qc(self, arm_index, od):
         """
