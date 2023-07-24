@@ -119,5 +119,5 @@ dependencies:
   - xz=5.2.6=h8d14728_0
   - zstd=1.5.2=h12be248_7
   - pip:
-      - roundabout-capacity==0.0.1
+      - roundabout-capacity==1.0.0
 prefix: C:\Users\cswanston\AppData\Local\miniforge3\envs\rCap
