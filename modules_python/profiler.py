@@ -28,11 +28,11 @@ class Profiler:
     def int_gausian_function(self, x, u, sigma, a, b):
         return integrate.quad(self.gausian_function(x, u, sigma), a, b)
 
-    def one_hour(self, od, sigma, period, periods, graph):
+    def one_hour(self, od, periods, graph):
         self.sectors = []
         if graph == True:
             xi = np.arange(-4,4,0.1).tolist()
-            yi = [self.gausian_function(x, u=1, sigma=1)(xi[xi.index(x)]) for x in xi]
+            yi = [self.gausian_function(x, u=1, sigma=self.sigma)(xi[xi.index(x)]) for x in xi]
             plt.plot(xi, yi)
             plt.show()
         for arm in range(len(od)):
@@ -40,8 +40,8 @@ class Profiler:
             intervals = 8 / periods
             a, b = -4, -4 + intervals
             for i in range(periods):
-                v = self.int_gausian_function(x, u=1, sigma=1, a=a, b=b)
-                full = self.int_gausian_function(x, u=1, sigma=1, a=-4, b=4)
+                v = self.int_gausian_function(x, u=1, sigma=self.sigma, a=a, b=b)
+                full = self.int_gausian_function(x, u=1, sigma=self.sigma, a=-4, b=4)
                 self.sectors.append(v[0]/full[0])
                 a += intervals
                 b += intervals

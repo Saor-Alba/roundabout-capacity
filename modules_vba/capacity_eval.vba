@@ -38,4 +38,6 @@ Function JUNCTION_CAP(od as Range, geometry as Range) As Variant
         JUNCTION_CAP = "Error: OD Matrix must have same number of rows and columns"
         Exit Function
 
+    Call geom_handler.
+
 

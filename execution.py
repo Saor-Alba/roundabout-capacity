@@ -21,7 +21,7 @@ def main(geometry):
     od = od_builder.rand_od_builder(arms=5)
     if PROFILING == True:
         profiler = Profiler(profile_type=Profiles.ONEHOUR)
-        od = Profiler.one_hour(od, sigma=1, period=1, periods= 4, graph=False)
+        od = profiler.one_hour(od, sigma=1, period=1, periods= 4, graph=False)
     if CALIBRATION == True:
         model_calibration = Calibration(
             calibration_type = Calibrations.INTERCEPT,
@@ -30,6 +30,7 @@ def main(geometry):
             calibration_variables=[],
             calibration_targets=[]
             )
+        capacity = model_calibration()
     model = Capacity_Eval(*geometry, circulatory_flow=od_builder.Qc(arm_index=1, od=od))
     arm_capacity = od_builder.Qe_stack(od)[0] / model.compute()
     print(f'RFC: {round(arm_capacity,3)}')
