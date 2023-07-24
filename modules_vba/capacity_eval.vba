@@ -25,3 +25,17 @@ End Function
 Private  Function Sx(e, v, l)
     Sx = (1.6 * (e - v)) / l
 End Function
+
+Function JUNCTION_CAP(od as Range, geometry as Range) As Variant
+    Dim od As Variant
+    Dim geometry As Variant
+    Dim output As Variant
+    
+    arr_od = od.Value
+    arr_geom = geometry.Value
+
+    If arr_od.Rows.Count <> arr_od.Columns.Count Then:
+        JUNCTION_CAP = "ErrorL OD Matrix must have same number of rows and columns"
+        Exit Function
+
+            

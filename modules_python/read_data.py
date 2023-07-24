@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import xlwings as xw
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class Data_Input:
