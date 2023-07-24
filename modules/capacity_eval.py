@@ -14,25 +14,25 @@ class Capacity_Eval:
     circulatory_flow: int
 
     def c(self, v, e, l, r, icd, phi, QcX):
-        return self.kx(phi, r) * (self.Fx(self.x2x(v, e, self.S(e, v, l))) - self.fcx(x2=self.x2x(v, e, self.S(e, v, l)), e=e, icd=icd) * QcX)
+        return self.kx(phi, r) * (self.Fx(v, e, l) - self.fcx(e, icd, v, l) * QcX)
 
     def kx(self, phi, r):
         return 1 - 0.00347 * (phi - 30) - 0.978 * ((1 / r) - 0.05)
 
-    def Fx(self, x2x):
-        return 303 * x2x
+    def Fx(self, v, e ,l):
+        return 303 * self.x2x(v, e, l)
 
-    def fcx(self, x2, e, icd):
-        return (0.210 * self.td(e, icd)) * (1 + 0.2 * x2)
+    def fcx(self, e, icd, v, l):
+        return (0.210 * self.td(e, icd)) * (1 + 0.2 * self.x2x(v, e, l))
 
     def td(self, e, icd):
         return 1 + (0.5 / (1 + pow(e, ((icd - 60) / 10))))
 
-    def x2x(seld, v, e, s):
-        return v + ((e - v) / 1 + 2 * s)
-
     def S(self, e, v, l):
         return (1.6 * (e - v)) / l
+
+    def x2x(self, v, e, l):
+        return v + ((e - v) / 1 + 2 * self.S(e, v, l))
 
     def compute(self):
         theoretical_capacity = self.c(

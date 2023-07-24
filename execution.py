@@ -5,7 +5,7 @@ PROFILING = False
 
 geometry = [3, 6, 30, 20, 60, 40]
 
-if __name__ == "__main__":
+def main(geometry):
     od_builder = OD_Eval(od_type=Flow_Type.RANDOM)
     od = od_builder.rand_od_builder(arms=5)
     if PROFILING == True:
@@ -22,3 +22,6 @@ if __name__ == "__main__":
     model = Capacity_Eval(*geometry, circulatory_flow=od_builder.Qc(arm_index=1, od=od))
     arm_capacity = od_builder.Qe_stack(od)[0] / model.compute()
     print(f'RFC: {round(arm_capacity,3)}')
+
+if __name__ == "__main__":
+    main(geometry=geometry)
