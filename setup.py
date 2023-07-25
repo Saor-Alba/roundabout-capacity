@@ -5,5 +5,5 @@ setuptools.setup(
     version='1.0.0',
     author='Angus Spence',
     packages=['modules_python', 'modules_vba'],
-    install_requires=['numpy', 'xlwings']
+    install_requires=['numpy', 'xlwings', 'pyinstaller']
 )

@@ -56,7 +56,8 @@ class Profiler:
         return dict(zip(range(len(od)), [self.sectors * len(od)]))
     
     def direct(self, od, period, periods):
-        """
-        Need to make an importer for this
-        """
-        return
+        self.sectors = []
+        for arm in range(len(od)):
+            for sector in range(self.sectors):
+                self.sectors.append(od[arm] * self.direct_levels[sector])
+        return dict(zip(range(len(od)), self.sectors))
