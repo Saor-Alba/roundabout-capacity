@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import xlwings as xw
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class Data_Input:
@@ -10,10 +10,10 @@ class Data_Input:
     """
     fpath: str = os.path.abspath("Junction_Capacity_Calculator.xlsx")
     
-    def main(fpath=fpath):
+    def main(self):
         # Initiate xw app and workbook
         app = xw.App(visible=True)
-        wb = xw.Book(fpath)
+        wb = xw.Book(self.fpath)
 
         # Define worksheet instance for Control and OD Input
         ctrl = wb.sheets["Control"]
@@ -69,5 +69,3 @@ class Data_Input:
         ctrl["B28"].value = rCap
 
         wb.save()
-        wb.close()
-        app.kill()

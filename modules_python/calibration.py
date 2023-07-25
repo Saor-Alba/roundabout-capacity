@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from dataclasses import dataclass, field
-from modules.capacity_eval import Capacity_Eval
+from modules_python.capacity_eval import Capacity_Eval
 
 class Calibrations(Enum):
     SLOPE = auto()

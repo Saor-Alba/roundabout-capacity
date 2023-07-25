@@ -16,11 +16,11 @@ class OD_Eval:
         np.fill_diagonal(od, 0)
         return od
     
-    # def od_importer(self):
-    #     """
-    #     This needs to be considered
-    #     """
-    #     return
+    def od_importer(self):
+        """
+        This needs to be considered
+        """
+        return
 
     def Qc(self, arm_index, od):
         """
@@ -55,7 +55,7 @@ class OD_Eval:
 
     def main(self, od_type):
         if od_type == Flow_Type.RANDOM:
-            od = self.rand_od_builder(self.arms)
+            od = self.rand_od_builder(4)
             Qc = self.Qc_stack(len(od), od)
             Qe = self.Qe_stack(od)
         else:
