@@ -22,16 +22,16 @@ class Profiler:
     direct_levels: list = field(default_factory=list)
     sectors: list = field(default_factory=list)
 
-    def gausian_function(self, x, u, sigma=1) -> Union[str, int]:
+    def gausian_function(self, u: float, sigma: float):
         return lambda x: u * math.exp(-1*((pow(x - 0,2))/2 * pow(sigma,2)))
         
-    def int_gausian_function(self, x, u, sigma, a, b):
+    def int_gausian_function(self, x: float, u: float, sigma: float, a: float, b: float):
         return integrate.quad(self.gausian_function(x, u, sigma), a, b)
 
-    def one_hour(self, od, periods, graph):
+    def one_hour(self, od: np.array, periods: int, graph: bool) -> dict:
         self.sectors = []
         if graph == True:
-            xi = np.arange(-4,4,0.1).tolist()
+            xi = np.arange(-4, 4, 0.1).tolist()
             yi = [self.gausian_function(x, u=1, sigma=self.sigma)(xi[xi.index(x)]) for x in xi]
             plt.plot(xi, yi)
             plt.show()
@@ -48,14 +48,14 @@ class Profiler:
             print(f"{QcX}: {self.sectors}")
         return dict(zip(range(len(od)), [[self.sectors[i] * sum(od[j]) for i in range(len(self.sectors))] for j in range(len(od))]))
 
-    def flat(self, od, periods):
+    def flat(self, od: np.array, periods: int) -> dict:
         self.sectors = []
         for arm in range(len(od)):
             QcX = sum(od[arm]) / periods
             self.sectors.append(QcX)
         return dict(zip(range(len(od)), [self.sectors * len(od)]))
     
-    def direct(self, od, period, periods):
+    def direct(self, od: np.array) -> dict:
         self.sectors = []
         for arm in range(len(od)):
             for sector in range(self.sectors):
